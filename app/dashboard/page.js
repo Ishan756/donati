@@ -2,7 +2,7 @@
 
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 
 export default function Dashboard() {
@@ -10,7 +10,7 @@ export default function Dashboard() {
   const router = useRouter();
   // Dummy fundraisers for demo
   const heroImg = "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80";
-  const dummyFundraisers = [
+  const dummyFundraisers = useMemo(() => [
     {
       title: "Help Rohan Fight Cancer",
       needed: 100000,
@@ -43,7 +43,7 @@ export default function Dashboard() {
       reason: "Emergency relief and supplies",
       document: "/flood-relief.pdf",
     },
-  ];
+  ], []);
   const [fundraisers, setFundraisers] = useState(dummyFundraisers);
   const [payments, setPayments] = useState([]); // ✅ Store payments
 
@@ -60,7 +60,7 @@ export default function Dashboard() {
     if (stored.length > 0) {
       setFundraisers([...stored, ...dummyFundraisers]);
     }
-  }, []);
+  }, [dummyFundraisers]);
 
   // ✅ Fetch payments from API
   useEffect(() => {

@@ -129,7 +129,7 @@ const PaymentPage = () => {
 
       <div className="flex justify-center items-center min-h-screen bg-gray-900 text-white p-6">
         <div className="bg-gray-800 p-6 rounded-lg shadow-lg w-full max-w-lg">
-          <h1 className="text-3xl font-bold text-center mb-4">{fundraiserDetails.name}'s Fundraiser</h1>
+          <h1 className="text-3xl font-bold text-center mb-4">{fundraiserDetails.name}&apos;s Fundraiser</h1>
           <p className="text-lg"><strong>Reason:</strong> {fundraiserDetails.reason}</p>
           <p className="text-lg"><strong>Needed:</strong> ₹{fundraiserDetails.amountNeeded.toLocaleString()}</p>
           <p className="text-lg"><strong>Raised:</strong> ₹{fundraiserDetails.amountRaised.toLocaleString()}</p>

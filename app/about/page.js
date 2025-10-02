@@ -88,8 +88,8 @@ export default function About() {
       {/* Get Involved */}
       <div className="bg-[#23232a] text-white py-12 text-center border-t border-[#23232a]">
         <h2 className="text-3xl font-bold text-blue-500 mb-2 animate-slideup">Get Involved</h2>
-        <p className="mt-3 max-w-2xl mx-auto text-gray-300 animate-fadein">
-          Whether you're looking to start a campaign, donate to a cause, or spread the word, you can make a difference today!
+          <p className="mt-3 max-w-2xl mx-auto text-gray-300 animate-fadein">
+            Whether you&apos;re looking to start a campaign, donate to a cause, or spread the word, you can make a difference today!
         </p>
         <div className="mt-6">
           <button 
