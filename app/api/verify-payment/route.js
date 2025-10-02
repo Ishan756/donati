@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import { connectDB } from "@/lib/mongodb";
 import Payment from "@/models/Payment";
+import { sendThankYouEmail } from "@/utils/sendThankYouEmail";
 
 export async function POST(req) {
   try {
@@ -60,7 +61,19 @@ export async function POST(req) {
     await newPayment.save();
     console.log("✅ Payment stored in database:", newPayment);
 
-    return new Response(JSON.stringify({ success: true, message: "Payment verified and stored" }), { status: 201 });
+    // Send thank-you email
+    const emailResult = await sendThankYouEmail({
+      to: donorEmail,
+      name: donorName,
+      amount,
+    });
+    if (emailResult.success) {
+      console.log("✅ Thank-you email sent to", donorEmail);
+    } else {
+      console.error("❌ Email send error:", emailResult.error);
+    }
+
+    return new Response(JSON.stringify({ success: true, message: "Payment verified and stored, email sent" }), { status: 201 });
   } catch (error) {
     console.error("❌ Error verifying payment:", error);
     return new Response(JSON.stringify({ success: false, error: "Server Error" }), { status: 500 });

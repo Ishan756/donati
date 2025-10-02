@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
+import { Toaster, toast } from "react-hot-toast";
 import { useSearchParams } from "next/navigation";
 import Script from "next/script";
 
@@ -40,7 +41,7 @@ const PaymentPage = () => {
   // Handle Payment
   const handlePayment = async () => {
     if (!donorName || !donorEmail || !donationAmount) {
-      alert("Please enter all details before proceeding.");
+  toast.error("Please enter all details before proceeding.");
       return;
     }
   
@@ -59,7 +60,7 @@ const PaymentPage = () => {
   
       if (!data.orderId) {
         console.error("❌ Order ID missing in response");
-        alert("Order ID not found! Please try again.");
+        toast.error("Order ID not found! Please try again.");
         return;
       }
   
@@ -74,10 +75,8 @@ const PaymentPage = () => {
         description: fundraiserDetails.reason,
         order_id: data.orderId,
         handler: async function (response) {
-          alert(`✅ Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
-  
+          toast.success(`Payment Successful! Payment ID: ${response.razorpay_payment_id}`);
           console.log("🚀 Verifying payment on server...");
-  
           // ✅ Send verification request to server
           const verifyResponse = await fetch("/api/verify-payment", {
             method: "POST",
@@ -92,14 +91,12 @@ const PaymentPage = () => {
               fundraiser: fundraiserDetails.name,
             }),
           });
-  
           const verifyData = await verifyResponse.json();
           console.log("🔹 Payment Verification Response:", verifyData);
-  
           if (verifyData.success) {
-            alert("🎉 Payment Verified & Stored Successfully!");
+            toast.success("Payment Verified & Mail Sent Successfully!");
           } else {
-            alert("❌ Payment verification failed!");
+            toast.error("Payment verification failed!");
           }
         },
         prefill: {
@@ -111,7 +108,7 @@ const PaymentPage = () => {
   
       if (!window.Razorpay) {
         console.error("❌ Razorpay SDK not loaded");
-        alert("Failed to load Razorpay. Please refresh and try again.");
+        toast.error("Failed to load Razorpay. Please refresh and try again.");
         return;
       }
   
@@ -120,13 +117,14 @@ const PaymentPage = () => {
       rzp1.open();
     } catch (error) {
       console.error("❌ Error creating order:", error);
-      alert("Something went wrong! Please try again.");
+      toast.error("Something went wrong! Please try again.");
     }
   };
   
 
   return (
     <>
+      <Toaster position="top-right" />
       <Script src="https://checkout.razorpay.com/v1/checkout.js" strategy="afterInteractive" />
 
       <div className="flex justify-center items-center min-h-screen bg-gray-900 text-white p-6">

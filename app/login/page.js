@@ -79,6 +79,14 @@ export default function Login() {
           Login with Google
         </button>
 
+        {/* GitHub Login Button */}
+        <button
+          onClick={() => signIn("github", { callbackUrl: "/dashboard" })} // ✅ Redirect to Dashboard
+          className="w-full mt-2 py-2 bg-gray-600 hover:bg-gray-700 text-white font-semibold rounded-lg transition duration-300"
+        >
+          Login with GitHub
+        </button>
+
         {/* Forgot Password & Signup Links */}
         <div className="flex justify-between text-sm mt-3 text-gray-400">
           <button onClick={() => router.push("/forgot-password")} className="hover:underline">
