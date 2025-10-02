@@ -3,17 +3,19 @@
 import { signOut, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import Image from "next/image";
 
 export default function Dashboard() {
   const { data: session, status } = useSession();
   const router = useRouter();
   // Dummy fundraisers for demo
+  const heroImg = "https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80";
   const dummyFundraisers = [
     {
       title: "Help Rohan Fight Cancer",
       needed: 100000,
       raised: 45000,
-      image: "https://images.unsplash.com/photo-1588776814546-ec7e1b1b1b1b?auto=format&fit=crop&w=600&q=80", // Hospital bed
+      image: "https://images.unsplash.com/photo-1504439468489-c8920d796a29?auto=format&fit=crop&w=600&q=80", // Cancer patient support
       reason: "Medical bills for chemotherapy",
       document: "/medical-reports.pdf",
     },
@@ -52,7 +54,13 @@ export default function Dashboard() {
     }
   }, [status, router]);
 
-  // Removed API fetch for fundraisers; only dummy examples are shown
+  // Load fundraisers from localStorage if available
+  useEffect(() => {
+    const stored = JSON.parse(localStorage.getItem("fundraisers") || "[]");
+    if (stored.length > 0) {
+      setFundraisers([...stored, ...dummyFundraisers]);
+    }
+  }, []);
 
   // ✅ Fetch payments from API
   useEffect(() => {
@@ -78,48 +86,59 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-900 text-white flex flex-col items-center p-6">
-      <h1 className="text-3xl font-bold">Welcome to Dashboard</h1>
-      {session?.user && (
-        <p className="mt-2 text-lg">Hello, {session.user.name} 👋</p>
-      )}
+    <div className="min-h-screen bg-[#18181b] text-[#e0e7ef]">
+      {/* Hero Section with Image & Animation */}
+      <div className="bg-[#23232a] text-white py-16 text-center border-b border-[#23232a] relative overflow-hidden">
+  <Image src={heroImg} alt="Dashboard Hero" fill priority className="absolute inset-0 w-full h-full object-cover opacity-20 " />
+        <div className="relative z-10">
+          <h1 className="text-5xl font-extrabold text-blue-500 mb-2 animate-slideup">Dashboard</h1>
+          {session?.user && (
+            <p className="mt-2 text-lg text-gray-300 animate-fadein">Welcome, {session.user.name} 👋</p>
+          )}
+          <p className="mt-2 text-lg text-gray-300 animate-fadein">Manage your fundraisers, donations, and impact.</p>
+          <button
+            onClick={() => router.push("/form")}
+            className="mt-6 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300 animate-fadein"
+          >
+            Start Fundraising Here
+          </button>
+        </div>
+      </div>
 
-      {/* ✅ Start Fundraising Button */}
-      <button
-        onClick={() => router.push("/fundraiser-form")}
-        className="mt-6 px-6 py-3 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg transition duration-300"
-      >
-        Start Fundraising Here
-      </button>
-
-      {/* ✅ Proceed to Payment Page */}
-     
-
-      {/* ✅ Active Fundraisers Section */}
-      <div className="mt-8 w-full max-w-3xl">
-        <h2 className="text-2xl font-bold mb-4">Active Fundraisers</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Active Fundraisers Section */}
+      <div className="mt-8 w-full max-w-5xl mx-auto">
+        <h2 className="text-2xl font-bold mb-4 text-center">Active Fundraisers</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 justify-items-center">
           {fundraisers.map((project, index) => (
-            <div key={index} className="bg-gray-800 rounded-xl shadow-lg overflow-hidden flex flex-col">
-              <img src={project.image} alt={project.title} className="w-full h-40 object-cover" />
-              <div className="p-4 flex-1 flex flex-col justify-between">
-                <div>
-                  <h3 className="text-xl font-semibold mb-1">{project.title}</h3>
+            <div
+              key={index}
+              className="bg-gradient-to-br from-[#23232a] to-[#18181b] rounded-2xl shadow-xl overflow-hidden flex flex-col transition-transform duration-300 hover:scale-105 hover:shadow-blue-500/40 border border-[#23232a] group"
+            >
+              <div className="relative w-full h-48">
+                <Image src={project.image} alt={project.title} fill className="w-full h-full object-cover group-hover:brightness-90 transition duration-300" />
+                <span className="absolute top-2 left-2 bg-blue-500 text-white text-xs px-3 py-1 rounded-full shadow">Featured</span>
+              </div>
+              <div className="p-5 flex-1 flex flex-col justify-between">
+                <div className="mb-3">
+                  <h3 className="text-xl font-bold mb-1 text-blue-400 group-hover:text-blue-300 transition">{project.title}</h3>
                   <p className="text-gray-300 text-sm mb-2">{project.reason}</p>
-                  <p className="text-green-400 font-bold">Raised: ₹{project.raised.toLocaleString()}</p>
-                  <p className="text-red-400 font-bold">Needed: ₹{project.needed.toLocaleString()}</p>
-                  {/* Supporting Document */}
-                  <a
-                    href={project.document}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-block mt-2 text-blue-400 hover:underline text-sm"
-                  >
-                    View Supporting Document
-                  </a>
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="text-green-400 font-bold">Raised: ₹{project.raised.toLocaleString()}</span>
+                    <span className="text-red-400 font-bold">Needed: ₹{project.needed.toLocaleString()}</span>
+                  </div>
+                  {project.document && (
+                    <a
+                      href={project.document}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-block mt-2 text-blue-400 hover:underline text-sm"
+                    >
+                      {project.documentName ? `View: ${project.documentName}` : "View Supporting Document"}
+                    </a>
+                  )}
                 </div>
                 <button
-                  className="mt-4 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition duration-300"
+                  className="mt-2 w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition duration-300 shadow group-hover:shadow-lg"
                   onClick={() => router.push(`/payment?username=${encodeURIComponent(project.title)}`)}
                 >
                   Proceed Payment
@@ -130,21 +149,20 @@ export default function Dashboard() {
         </div>
       </div>
 
-      {/* ✅ Recent Payments Section */}
-      <div className="mt-8 w-full max-w-2xl">
-        <h2 className="text-2xl font-bold mb-4">Recent Payments</h2>
-
+      {/* Recent Payments Section */}
+      <div className="mt-8 w-full max-w-2xl mx-auto">
+        <h2 className="text-2xl font-bold mb-4 text-center">Recent Payments</h2>
         {payments.length === 0 ? (
-          <p>No recent payments.</p>
+          <p className="text-center">No recent payments.</p>
         ) : (
-          <div className="space-y-4">
+          <div className="flex flex-col items-center space-y-4">
             {payments.map((payment, index) => (
-              <div key={index} className="bg-gray-800 p-4 rounded-lg">
-                <h3 className="text-xl font-semibold">{payment.donorName}</h3>
-                <p>Email: {payment.donorEmail}</p>
-                <p>Amount: ₹{payment.amount}</p>
-                <p>Fundraiser: {payment.fundraiser}</p>
-                <p>Payment ID: {payment.paymentId}</p>
+              <div key={index} className="bg-gray-800 p-4 rounded-lg shadow-md border border-[#23232a] animate-fadein w-full max-w-md">
+                <h3 className="text-xl font-semibold text-blue-400 mb-1">{payment.donorName}</h3>
+                <p className="text-gray-300">Email: {payment.donorEmail}</p>
+                <p className="text-green-400 font-bold">Amount: ₹{payment.amount}</p>
+                <p className="text-blue-400">Fundraiser: {payment.fundraiser}</p>
+                <p className="text-gray-400">Payment ID: {payment.paymentId}</p>
                 <p>Status: <span className="text-green-400">{payment.status}</span></p>
               </div>
             ))}
@@ -152,13 +170,15 @@ export default function Dashboard() {
         )}
       </div>
 
-      {/* ✅ Logout Button */}
-      <button
-        onClick={() => signOut({ callbackUrl: "/login" })}
-        className="mt-6 px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition duration-300"
-      >
-        Logout
-      </button>
+      {/* Logout Button */}
+      <div className="flex justify-center mt-8">
+        <button
+          onClick={() => signOut({ callbackUrl: "/login" })}
+          className="px-6 py-3 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg transition duration-300 animate-fadein"
+        >
+          Logout
+        </button>
+      </div>
     </div>
   );
 }

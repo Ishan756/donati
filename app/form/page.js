@@ -12,6 +12,7 @@ export default function FundraiserForm() {
     razorpayID: "",
     razorpaySecret: "",
     documents: null,
+    image: null,
   });
 
   const handleChange = (e) => {
@@ -23,18 +24,48 @@ export default function FundraiserForm() {
     setFormData({ ...formData, documents: e.target.files[0] });
   };
 
+  const handleImageChange = (e) => {
+    setFormData({ ...formData, image: e.target.files[0] });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
+    // Convert image and document to object URLs for preview/download
+    let imageUrl = "https://images.unsplash.com/photo-1503676382389-4809596d5290?auto=format&fit=crop&w=600&q=80";
+    let documentUrl = "";
+    if (formData.image) {
+      imageUrl = URL.createObjectURL(formData.image);
+    }
+    if (formData.documents) {
+      documentUrl = URL.createObjectURL(formData.documents);
+    }
+    const newFundraiser = {
+      title: formData.title,
+      needed: Number(formData.neededAmount),
+      raised: 0,
+      image: imageUrl,
+      reason: formData.description,
+      document: documentUrl,
+      documentName: formData.documents ? formData.documents.name : "",
+    };
+    const existing = JSON.parse(localStorage.getItem("fundraisers") || "[]");
+    localStorage.setItem("fundraisers", JSON.stringify([newFundraiser, ...existing]));
     alert("Fundraiser submitted successfully!");
-    router.push("/dashboard"); // Redirect to Dashboard
+    router.push("/dashboard");
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-6">
       <h1 className="text-3xl font-bold mb-6">Create a Fundraiser</h1>
 
-      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg w-full max-w-lg">
+  <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded-lg w-full max-w-lg">
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          required
+          className="w-full p-3 mb-3 bg-gray-700 rounded-lg focus:outline-none"
+        />
         <input
           type="text"
           name="title"

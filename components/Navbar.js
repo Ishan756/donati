@@ -57,9 +57,7 @@ const Navbar = () => {
             >
               Login
             </button>
-            <Link href="/signup" passHref>
-              <button className="nav-btn">Sign Up</button>
-            </Link>
+          
           </>
         ) : (
           <>
@@ -67,7 +65,7 @@ const Navbar = () => {
             <div className="relative" ref={dropdownRef}>
               <button
                 onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-                className="flex items-center gap-2 p-2 rounded-full hover:bg-[#23232a] transition duration-200 border border-[#23232a]"
+                className="flex items-center gap-2 px-2 py-1 rounded-full hover:bg-[#23232a] transition duration-200 border border-[#23232a]"
               >
                 <Image
                   src={session.user?.image || "/default-avatar.svg"}
@@ -175,8 +173,8 @@ const Navbar = () => {
           </>
         )}
 
-        <Link href="/hurray" passHref>
-          <button className="nav-btn">Hurray</button>
+        <Link href="/dashboard" passHref>
+          <button className="nav-btn">Dashboard</button>
         </Link>
       </div>
 

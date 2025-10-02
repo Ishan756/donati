@@ -11,7 +11,7 @@ export default function About() {
     <div className="min-h-screen bg-[#18181b] text-[#e0e7ef]">
       {/* Hero Section with Image & Animation */}
       <div className="bg-[#23232a] text-white py-16 text-center border-b border-[#23232a] relative overflow-hidden">
-  <Image src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80" alt="Donate Hero" fill priority className="absolute inset-0 w-full h-full object-cover opacity-20 animate-fadein" />
+  <Image src="https://images.unsplash.com/photo-1465101046530-73398c7f28ca?auto=format&fit=crop&w=1200&q=80" alt="Donate Hero" fill priority className="absolute inset-0 w-full h-full object-cover opacity-20" />
         <div className="relative z-10">
           <h1 className="text-5xl font-extrabold text-blue-500 mb-2 animate-slideup">About Donati</h1>
           <p className="mt-2 text-lg text-gray-300 animate-fadein">Empowering generosity through secure crowdfunding</p>

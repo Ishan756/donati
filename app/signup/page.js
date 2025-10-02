@@ -1,6 +1,7 @@
 "use client"; // Required for Client Component
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { Toaster, toast } from "react-hot-toast";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
@@ -21,8 +22,9 @@ export default function Signup() {
   return (
     <>
       <Toaster position="top-right" />
-      <div className="flex justify-center items-center h-screen bg-gray-900">
-        <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-96 text-center">
+      <div className="flex justify-center items-center h-screen bg-gray-900 relative overflow-hidden">
+  <Image src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=1200&q=80" alt="Signup Hero" fill priority className="absolute inset-0 w-full h-full object-cover opacity-60 " />
+        <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-96 text-center relative z-10 animate-slideup">
           <h1 className="font-bold text-3xl text-white mb-4">Create an Account</h1>
           {/* Full Name Input */}
           <input
@@ -86,11 +88,5 @@ export default function Signup() {
       </div>
     </>
   );
-          <button onClick={() => router.push("/login")} className="text-blue-400 hover:underline">
-            Login
-          </button>
-        </div>
-      </div>
-    </div>
-  );
+// ...existing code...
 }

@@ -22,7 +22,7 @@ export default function Projects() {
       {/* Our Crowdfunding Projects */}
       <div className="max-w-5xl mx-auto px-6 py-12">
         <h2 className="text-3xl font-bold text-center text-blue-500 mb-2 animate-slideup">Impactful Campaigns</h2>
-        <div className="flex flex-wrap justify-center gap-8 mt-8">
+  <div className="flex flex-wrap justify-center items-center gap-8 mt-8">
           {[{
             img: project1,
             title: "Medical Aid for Children",
@@ -50,7 +50,7 @@ export default function Projects() {
         </div>
 
         {/* Animated Donation Tips */}
-        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
+  <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 justify-items-center">
           {[{
             title: "Verify Campaigns",
             desc: "Always check the authenticity of campaigns before donating.",
@@ -81,7 +81,7 @@ export default function Projects() {
             These individuals urgently need financial assistance for medical emergencies and other causes.
           </p>
 
-          <div className="flex flex-wrap justify-center gap-8 mt-8">
+          <div className="flex flex-wrap justify-center items-center gap-8 mt-8">
             {[{
               img: receiver1,
               name: "John Doe - Urgent Surgery",

@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { signIn, useSession } from "next-auth/react";
 import React, { useState, useEffect } from "react";
+import Image from "next/image";
 
 export default function Login() {
   const { data: session } = useSession();
@@ -40,8 +41,9 @@ export default function Login() {
   };
 
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-900">
-      <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-96 text-center">
+    <div className="flex justify-center items-center h-screen bg-gray-900 relative overflow-hidden">
+  <Image src="https://images.unsplash.com/photo-1506784365847-bbad939e9335?auto=format&fit=crop&w=1200&q=80" alt="Login Hero" fill priority className="absolute inset-0 w-full h-full object-cover opacity-60" />
+      <div className="bg-gray-800 p-8 rounded-xl shadow-lg w-96 text-center relative z-10 animate-slideup">
         <h1 className="font-bold text-3xl text-white mb-4">Login</h1>
 
         {/* Email Input */}
